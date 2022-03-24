@@ -5,16 +5,15 @@ const $ = (element) => document.querySelector(element);
 class App {
   constructor() {
     this._people = [];
+    this._nextId = 0;
   }
-
-  id = 0;
 
   get people() {
     return this._people;
   }
 
   addPerson(personName) {
-    this._people.push(new Person(personName, this.id++));
+    this._people.push(new Person(personName, this._nextId++));
   }
 }
 
@@ -29,7 +28,13 @@ function init() {
   app.addPerson('백화평');
   app.addPerson('양채훈');
   const render = () => {
-    $('#app').innerHTML = app.people.map((person) => `<li>${person.name} (${person.id})</li>`).join('');
+    $('#app').innerHTML = `
+      <ul>
+        ${app.people
+          .map((person) => `<li class="text-lg text-gray-800 mb-2">${person.name} (${person.id})</li>`)
+          .join('')}
+      </ul>
+    `;
   };
 
   render();
