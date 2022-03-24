@@ -31,6 +31,12 @@ function init() {
   app.addPerson('박희원');
   app.addPerson('백화평');
   app.addPerson('양채훈');
+  app.addPerson('양채훈');
+  app.addPerson('양채훈');
+  app.addPerson('양채훈');
+  app.addPerson('양채훈');
+  app.addPerson('양채훈');
+  app.addPerson('양채훈');
   app.people[0].prays = ['미움 대신 사랑하기'];
   app.people[5].prays = ['거룩하게 화낼 수 있길ㅁㄴㅇㅁㄴㅇㅁㅇㄴㅇㅁㄴ', '가족들에게 기쁨이 되는 존재가 되길'];
   const render = () => {
@@ -52,14 +58,16 @@ function init() {
   };
 
   render();
-
+  // console.log($('body').classList.add('hi'));
   const closeAddPersonModal = () => {
     $('#add-person-input').value = '';
     $('#add-person-modal-background').classList.add('hidden');
+    $('body').classList.remove('overflow-y-hidden');
   };
 
   const closeEditPrayModal = () => {
     $('#edit-pray-modal-background').classList.add('hidden');
+    $('body').classList.remove('overflow-y-hidden');
   };
 
   $('#add-person-form').addEventListener('submit', (event) => {
@@ -75,6 +83,7 @@ function init() {
   $('#add-person-button').addEventListener('click', () => {
     $('#add-person-modal-background').classList.remove('hidden');
     $('#add-person-input').focus();
+    $('body').classList.add('overflow-y-hidden');
   });
 
   $('#add-person-modal-background').addEventListener('click', (event) => {
@@ -117,6 +126,7 @@ function init() {
 
       $('#edit-pray-input-box').querySelector('input').focus();
       $('#edit-pray-input-box').dataset.id = id;
+      $('body').classList.add('overflow-y-hidden');
     }
   });
 
