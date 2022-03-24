@@ -2,7 +2,7 @@ class Person {
   constructor(name, id) {
     this._name = name;
     this._id = id;
-    this._pray = [];
+    this._prays = [];
   }
 
   get name() {
@@ -13,8 +13,12 @@ class Person {
     return this._id;
   }
 
-  get pray() {
-    return this._pray;
+  get prays() {
+    return this._prays;
+  }
+
+  set prays(prays) {
+    this._prays = prays;
   }
 }
 
