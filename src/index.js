@@ -15,6 +15,10 @@ class App {
   addPerson(personName) {
     this._people.push(new Person(personName, this._nextId++));
   }
+
+  getPerson(id) {
+    return this._people[id];
+  }
 }
 
 function init() {
@@ -36,7 +40,7 @@ function init() {
           .map(
             (person) => `
           <li class="text-lg text-gray-800 mb-2">
-          ${person.name} <button class="text-sm">✏️</button>
+          ${person.name} <button class="edit-pray-button text-sm" data-id="${person.id}">✏️</button>
           <ul class="ml-5" style="list-style-type:'\\2728'">
             ${person.prays.map((pray) => `<li class="text-gray-600">${pray}</li>`).join('')}
           </ul>
@@ -78,6 +82,52 @@ function init() {
 
   $('#add-person-cancel-button').addEventListener('click', () => {
     closeAddPersonModal();
+  });
+
+  $('#app').addEventListener('click', (event) => {
+    const $editPrayButton = event.target.closest('.edit-pray-button');
+    if ($editPrayButton) {
+      $('#edit-pray-modal-background').classList.remove('hidden');
+      const person = app.getPerson($editPrayButton.dataset.id);
+      const prays = person.prays;
+
+      $('#edit-pray-name').innerText = person.name;
+
+      if (!prays.length) {
+        $(
+          '#edit-pray-input-box',
+        ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
+      } else {
+        $('#edit-pray-input-box').innerHTML = prays
+          .map(
+            (pray) => `<input
+            class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0"
+            placeholder="기도제목을 입력해주세요."
+            value="${pray}"
+          />`,
+          )
+          .join('');
+      }
+
+      $('#edit-pray-input-box').querySelector('input').focus();
+    }
+  });
+
+  $('#add-pray-button').addEventListener('click', () => {
+    $('#edit-pray-input-box').insertAdjacentHTML(
+      'beforeEnd',
+      `<input
+      class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0"
+      placeholder="기도제목을 입력해주세요."
+    />`,
+    );
+  });
+
+  $('#edit-pray-reset').addEventListener('click', () => {
+    $(
+      '#edit-pray-input-box',
+    ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
+    $('#edit-pray-input-box').querySelector('input').focus();
   });
 }
 
