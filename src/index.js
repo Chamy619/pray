@@ -138,6 +138,8 @@ function init() {
       placeholder="기도제목을 입력해주세요."
     />`,
     );
+    const inputs = $('#edit-pray-input-box').querySelectorAll('input');
+    inputs[inputs.length - 1].focus();
   });
 
   $('#edit-pray-reset').addEventListener('click', () => {
