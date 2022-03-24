@@ -58,6 +58,10 @@ function init() {
     $('#add-person-modal-background').classList.add('hidden');
   };
 
+  const closeEditPrayModal = () => {
+    $('#edit-pray-modal-background').classList.add('hidden');
+  };
+
   $('#add-person-form').addEventListener('submit', (event) => {
     event.preventDefault();
     const name = $('#add-person-input').value;
@@ -128,6 +132,16 @@ function init() {
       '#edit-pray-input-box',
     ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
     $('#edit-pray-input-box').querySelector('input').focus();
+  });
+
+  $('#edit-pray-cancel-button').addEventListener('click', () => {
+    closeEditPrayModal();
+  });
+
+  $('#edit-pray-modal-background').addEventListener('click', (event) => {
+    if (!event.target.closest('#edit-pray-modal')) {
+      closeEditPrayModal();
+    }
   });
 }
 
