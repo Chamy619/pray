@@ -92,7 +92,9 @@ function init() {
     const $editPrayButton = event.target.closest('.edit-pray-button');
     if ($editPrayButton) {
       $('#edit-pray-modal-background').classList.remove('hidden');
-      const person = app.getPerson($editPrayButton.dataset.id);
+
+      const id = $editPrayButton.dataset.id;
+      const person = app.getPerson(id);
       const prays = person.prays;
 
       $('#edit-pray-name').innerText = person.name;
@@ -114,6 +116,7 @@ function init() {
       }
 
       $('#edit-pray-input-box').querySelector('input').focus();
+      $('#edit-pray-input-box').dataset.id = id;
     }
   });
 
@@ -142,6 +145,16 @@ function init() {
     if (!event.target.closest('#edit-pray-modal')) {
       closeEditPrayModal();
     }
+  });
+
+  $('#edit-pray-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const personId = $('#edit-pray-input-box').dataset.id;
+    const prays = Array.from($('#edit-pray-input-box').querySelectorAll('input'));
+
+    app.people[personId].prays = prays.map((input) => input.value).filter((pray) => !!pray);
+    closeEditPrayModal();
+    render();
   });
 }
 
