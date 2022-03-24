@@ -58,7 +58,7 @@ function init() {
   };
 
   render();
-  // console.log($('body').classList.add('hi'));
+
   const closeAddPersonModal = () => {
     $('#add-person-input').value = '';
     $('#add-person-modal-background').classList.add('hidden');
