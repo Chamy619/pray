@@ -19,26 +19,32 @@ class App {
   getPerson(id) {
     return this._people[id];
   }
+
+  loadPerson(person) {
+    this._people.push(person);
+  }
+
+  save() {
+    localStorage.setItem('app_info', JSON.stringify(this));
+  }
+
+  load() {
+    const appInfo = JSON.parse(localStorage.getItem('app_info'));
+    if (appInfo) {
+      appInfo._people.forEach((person) => {
+        const newPerson = new Person(person._name, person._id);
+        newPerson.prays = person._prays;
+        this.loadPerson(newPerson);
+      });
+      this._nextId = appInfo._nextId;
+    }
+  }
 }
 
 function init() {
   const app = new App();
-  app.addPerson('김단비');
-  app.addPerson('신지수');
-  app.addPerson('박규선');
-  app.addPerson('서경원');
-  app.addPerson('엄유진');
-  app.addPerson('박희원');
-  app.addPerson('백화평');
-  app.addPerson('양채훈');
-  app.addPerson('양채훈');
-  app.addPerson('양채훈');
-  app.addPerson('양채훈');
-  app.addPerson('양채훈');
-  app.addPerson('양채훈');
-  app.addPerson('양채훈');
-  app.people[0].prays = ['미움 대신 사랑하기'];
-  app.people[5].prays = ['거룩하게 화낼 수 있길ㅁㄴㅇㅁㄴㅇㅁㅇㄴㅇㅁㄴ', '가족들에게 기쁨이 되는 존재가 되길'];
+  app.load();
+
   const render = () => {
     $('#app').innerHTML = `
       <ul>
@@ -78,6 +84,7 @@ function init() {
     }
     closeAddPersonModal();
     render();
+    app.save();
   });
 
   $('#add-person-button').addEventListener('click', () => {
@@ -167,6 +174,7 @@ function init() {
     app.people[personId].prays = prays.map((input) => input.value).filter((pray) => !!pray);
     closeEditPrayModal();
     render();
+    app.save();
   });
 }
 
