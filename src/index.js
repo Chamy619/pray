@@ -27,11 +27,21 @@ function init() {
   app.addPerson('박희원');
   app.addPerson('백화평');
   app.addPerson('양채훈');
+  app.people[0].prays = ['미움 대신 사랑하기'];
+  app.people[5].prays = ['거룩하게 화낼 수 있길ㅁㄴㅇㅁㄴㅇㅁㅇㄴㅇㅁㄴ', '가족들에게 기쁨이 되는 존재가 되길'];
   const render = () => {
     $('#app').innerHTML = `
       <ul>
         ${app.people
-          .map((person) => `<li class="text-lg text-gray-800 mb-2">${person.name} (${person.id})</li>`)
+          .map(
+            (person) => `
+          <li class="text-lg text-gray-800 mb-2">
+          ${person.name} <button class="text-sm">✏️</button>
+          <ul class="ml-5" style="list-style-type:'\\2728'">
+            ${person.prays.map((pray) => `<li class="text-gray-600">${pray}</li>`).join('')}
+          </ul>
+          </li>`,
+          )
           .join('')}
       </ul>
     `;
