@@ -39,12 +39,35 @@ function init() {
 
   render();
 
-  $('#add-person-button').addEventListener('click', () => {
-    const name = prompt('기도할 사람 이름을 입력해주세요.');
+  const closeAddPersonModal = () => {
+    $('#add-person-input').value = '';
+    $('#add-person-modal-background').classList.add('hidden');
+  };
+
+  $('#add-person-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const name = $('#add-person-input').value;
     if (name) {
       app.addPerson(name);
-      render();
     }
+    closeAddPersonModal();
+    render();
+  });
+
+  $('#add-person-button').addEventListener('click', () => {
+    $('#add-person-modal-background').classList.remove('hidden');
+    $('#add-person-input').focus();
+  });
+
+  $('#add-person-modal-background').addEventListener('click', (event) => {
+    const modal = event.target.closest('#add-person-modal');
+    if (!modal) {
+      closeAddPersonModal();
+    }
+  });
+
+  $('#add-person-cancel-button').addEventListener('click', () => {
+    closeAddPersonModal();
   });
 }
 
