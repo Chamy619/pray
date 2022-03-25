@@ -23,7 +23,9 @@ class App {
       .map(
         (person) => `
       <li class="text-lg text-gray-800 mb-2">
-      ${person.name} <button class="edit-pray-button text-sm" data-id="${person.id}">✏️</button>
+      ${person.name} 
+      <button class="edit-pray-button px-1 text-sm hover:text-lg" data-id="${person.id}">✏️</button>
+      <button class="remove-person-button px-1 text-sm hover:text-lg" data-id="${person.id}">🗑</button>
       <ul class="ml-5" style="list-style-type:'\\2728'">
         ${person.prays.map((pray) => `<li class="text-gray-600">${pray}</li>`).join('')}
       </ul>
@@ -92,6 +94,12 @@ class App {
     this.app.save();
   };
 
+  removePerson = (id) => {
+    this.app.removePerson(id);
+    this.render();
+    this.app.save();
+  };
+
   addPray = () => {
     $('#edit-pray-input-box').insertAdjacentHTML(
       'beforeEnd',
@@ -141,6 +149,13 @@ class App {
         const id = $editPrayButton.dataset.id;
         const person = this.app.getPerson(id);
         this.openEditPrayModal(person);
+        return;
+      }
+
+      const $removePersonButton = event.target.closest('.remove-person-button');
+      if ($removePersonButton) {
+        const id = $removePersonButton.dataset.id;
+        this.removePerson(id);
       }
     });
 

@@ -18,6 +18,10 @@ class People {
     return this._people[id];
   }
 
+  removePerson(id) {
+    this._people = this._people.filter((person) => person.id !== Number(id));
+  }
+
   loadPerson(person) {
     this._people.push(person);
   }
