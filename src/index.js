@@ -8,6 +8,12 @@ class App {
     this.app.load();
     this.render();
     this.initEvent();
+    // eslint-disable-next-line no-undef
+    this.clipboard = new ClipboardJS('.copy-button', {
+      text: () => {
+        return this.app.text;
+      },
+    });
   }
 
   render = () => {

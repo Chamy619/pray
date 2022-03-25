@@ -37,6 +37,10 @@ class People {
       this._nextId = appInfo._nextId;
     }
   }
+
+  get text() {
+    return this.people.map((person) => person.text).join('\n\n');
+  }
 }
 
 export default People;
