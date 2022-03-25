@@ -15,7 +15,7 @@ class People {
   }
 
   getPerson(id) {
-    return this._people[id];
+    return this._people.find((person) => person.id === Number(id));
   }
 
   removePerson(id) {
