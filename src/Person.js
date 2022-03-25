@@ -20,6 +20,10 @@ class Person {
   set prays(prays) {
     this._prays = prays;
   }
+
+  get text() {
+    return `${this.name}\n ${this.prays.map((pray) => `- ${pray}`)}`;
+  }
 }
 
 export default Person;
