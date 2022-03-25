@@ -90,5 +90,28 @@
         </form>
       </div>
     </div>
+    <div
+      class="fixed flex hidden justify-center items-center top-0 w-full h-full bg-gray-800 bg-opacity-75"
+      id="remove-person-modal-background"
+    >
+      <div class="bg-white rounded-lg w-96 flex-col shadow-2xl" id="remove-person-modal">
+        <h3 class="py-2 rounded-t-lg text-center text-2xl text-gray-200 bg-red-500">삭제</h3>
+        <h5 class="text-lg pt-5 text-center" id="remove-person-text">ooo님을 지우시겠습니까?</h5>
+        <div class="flex justify-between my-3 mx-5">
+          <button
+            class="rounded-lg py-2 px-4 bg-gray-500 text-gray-50 hover:bg-gray-700"
+            id="remove-person-cancel-button"
+          >
+            취소
+          </button>
+          <button
+            class="rounded-lg py-2 px-4 bg-red-500 text-gray-50 hover:bg-red-700"
+            id="remove-person-confirm-button"
+          >
+            확인
+          </button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

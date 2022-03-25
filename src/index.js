@@ -40,6 +40,10 @@ class App {
     $('body').classList.add('overflow-y-hidden');
   };
 
+  enableBodyScroll = () => {
+    $('body').classList.remove('overflow-y-hidden');
+  };
+
   openAddPersonModal = () => {
     $('#add-person-modal-background').classList.remove('hidden');
     $('#add-person-input').focus();
@@ -49,7 +53,7 @@ class App {
   closeAddPersonModal = () => {
     $('#add-person-input').value = '';
     $('#add-person-modal-background').classList.add('hidden');
-    $('body').classList.remove('overflow-y-hidden');
+    this.enableBodyScroll();
   };
 
   openEditPrayModal = (person) => {
@@ -81,7 +85,7 @@ class App {
 
   closeEditPrayModal = () => {
     $('#edit-pray-modal-background').classList.add('hidden');
-    $('body').classList.remove('overflow-y-hidden');
+    this.enableBodyScroll();
   };
 
   addPerson = () => {
@@ -94,8 +98,21 @@ class App {
     this.app.save();
   };
 
+  openRemovePersonModal = (person) => {
+    $('#remove-person-modal-background').classList.remove('hidden');
+    $('#remove-person-text').innerHTML = `<strong>${person.name}</strong> 님을 지우시겠습니까?`;
+    $('#remove-person-confirm-button').dataset.id = person.id;
+    this.preventBodyScroll();
+  };
+
+  closeRemovePersonModal = () => {
+    $('#remove-person-modal-background').classList.add('hidden');
+    this.enableBodyScroll();
+  };
+
   removePerson = (id) => {
     this.app.removePerson(id);
+    this.closeRemovePersonModal();
     this.render();
     this.app.save();
   };
@@ -120,7 +137,7 @@ class App {
   };
 
   editPrays = (id, prays) => {
-    this.app.people[id].prays = prays.map((input) => input.value).filter((pray) => !!pray);
+    this.app.getPerson(id).prays = prays.map((input) => input.value).filter((pray) => !!pray);
     this.closeEditPrayModal();
     this.render();
     this.app.save();
@@ -155,7 +172,9 @@ class App {
       const $removePersonButton = event.target.closest('.remove-person-button');
       if ($removePersonButton) {
         const id = $removePersonButton.dataset.id;
-        this.removePerson(id);
+        const person = this.app.getPerson(id);
+        this.openRemovePersonModal(person);
+        return;
       }
     });
 
@@ -179,6 +198,19 @@ class App {
       const prays = Array.from($('#edit-pray-input-box').querySelectorAll('input'));
 
       this.editPrays(personId, prays);
+    });
+
+    $('#remove-person-modal-background').addEventListener('click', (event) => {
+      if (!event.target.closest('#remove-person-modal')) {
+        this.closeRemovePersonModal();
+      }
+    });
+
+    $('#remove-person-cancel-button').addEventListener('click', this.closeRemovePersonModal);
+
+    $('#remove-person-confirm-button').addEventListener('click', (event) => {
+      const id = event.target.dataset.id;
+      this.removePerson(id);
     });
   };
 }
