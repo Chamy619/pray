@@ -10,7 +10,7 @@ class App {
     this.initEvent();
   }
 
-  render() {
+  render = () => {
     $('#app').innerHTML = `
     <ul>
     ${this.app.people
@@ -26,36 +26,99 @@ class App {
       .join('')}
     </ul>
     `;
-  }
+  };
 
-  closeAddPersonModal() {
+  preventBodyScroll = () => {
+    $('body').classList.add('overflow-y-hidden');
+  };
+
+  openAddPersonModal = () => {
+    $('#add-person-modal-background').classList.remove('hidden');
+    $('#add-person-input').focus();
+    this.preventBodyScroll();
+  };
+
+  closeAddPersonModal = () => {
     $('#add-person-input').value = '';
     $('#add-person-modal-background').classList.add('hidden');
     $('body').classList.remove('overflow-y-hidden');
-  }
+  };
 
-  closeEditPrayModal() {
+  openEditPrayModal = (person) => {
+    $('#edit-pray-name').innerText = person.name;
+    $('#edit-pray-modal-background').classList.remove('hidden');
+    this.preventBodyScroll();
+    $('#edit-pray-input-box').dataset.id = person.id;
+    this.drawPrayInput(person.prays);
+    $('#edit-pray-input-box').querySelector('input').focus();
+  };
+
+  drawPrayInput = (prays) => {
+    if (!prays.length) {
+      $(
+        '#edit-pray-input-box',
+      ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
+    } else {
+      $('#edit-pray-input-box').innerHTML = prays
+        .map(
+          (pray) => `<input
+          class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0"
+          placeholder="기도제목을 입력해주세요."
+          value="${pray}"
+        />`,
+        )
+        .join('');
+    }
+  };
+
+  closeEditPrayModal = () => {
     $('#edit-pray-modal-background').classList.add('hidden');
     $('body').classList.remove('overflow-y-hidden');
-  }
+  };
 
-  initEvent() {
+  addPerson = () => {
+    const name = $('#add-person-input').value;
+    if (name) {
+      this.app.addPerson(name);
+    }
+    this.closeAddPersonModal();
+    this.render();
+    this.app.save();
+  };
+
+  addPray = () => {
+    $('#edit-pray-input-box').insertAdjacentHTML(
+      'beforeEnd',
+      `<input
+      class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0"
+      placeholder="기도제목을 입력해주세요."
+    />`,
+    );
+    const inputs = $('#edit-pray-input-box').querySelectorAll('input');
+    inputs[inputs.length - 1].focus();
+  };
+
+  clearPrayInput = () => {
+    $(
+      '#edit-pray-input-box',
+    ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
+    $('#edit-pray-input-box').querySelector('input').focus();
+  };
+
+  editPrays = (id, prays) => {
+    this.app.people[id].prays = prays.map((input) => input.value).filter((pray) => !!pray);
+    this.closeEditPrayModal();
+    this.render();
+    this.app.save();
+  };
+
+  initEvent = () => {
     $('#add-person-form').addEventListener('submit', (event) => {
       event.preventDefault();
-      const name = $('#add-person-input').value;
-      if (name) {
-        this.app.addPerson(name);
-      }
-      this.closeAddPersonModal();
-      this.render();
-      this.app.save();
+      this.addPerson();
     });
 
-    $('#add-person-button').addEventListener('click', () => {
-      $('#add-person-modal-background').classList.remove('hidden');
-      $('#add-person-input').focus();
-      $('body').classList.add('overflow-y-hidden');
-    });
+    $('#add-person-button').addEventListener('click', this.openAddPersonModal);
 
     $('#add-person-modal-background').addEventListener('click', (event) => {
       const modal = event.target.closest('#add-person-modal');
@@ -64,61 +127,20 @@ class App {
       }
     });
 
-    $('#add-person-cancel-button').addEventListener('click', () => {
-      this.closeAddPersonModal();
-    });
+    $('#add-person-cancel-button').addEventListener('click', this.closeAddPersonModal);
 
     $('#app').addEventListener('click', (event) => {
       const $editPrayButton = event.target.closest('.edit-pray-button');
       if ($editPrayButton) {
-        $('#edit-pray-modal-background').classList.remove('hidden');
-
         const id = $editPrayButton.dataset.id;
         const person = this.app.getPerson(id);
-        const prays = person.prays;
-
-        $('#edit-pray-name').innerText = person.name;
-
-        if (!prays.length) {
-          $(
-            '#edit-pray-input-box',
-          ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
-        } else {
-          $('#edit-pray-input-box').innerHTML = prays
-            .map(
-              (pray) => `<input
-              class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0"
-              placeholder="기도제목을 입력해주세요."
-              value="${pray}"
-            />`,
-            )
-            .join('');
-        }
-
-        $('#edit-pray-input-box').querySelector('input').focus();
-        $('#edit-pray-input-box').dataset.id = id;
-        $('body').classList.add('overflow-y-hidden');
+        this.openEditPrayModal(person);
       }
     });
 
-    $('#add-pray-button').addEventListener('click', () => {
-      $('#edit-pray-input-box').insertAdjacentHTML(
-        'beforeEnd',
-        `<input
-        class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0"
-        placeholder="기도제목을 입력해주세요."
-      />`,
-      );
-      const inputs = $('#edit-pray-input-box').querySelectorAll('input');
-      inputs[inputs.length - 1].focus();
-    });
+    $('#add-pray-button').addEventListener('click', this.addPray);
 
-    $('#edit-pray-reset').addEventListener('click', () => {
-      $(
-        '#edit-pray-input-box',
-      ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
-      $('#edit-pray-input-box').querySelector('input').focus();
-    });
+    $('#edit-pray-reset').addEventListener('click', this.clearPrayInput);
 
     $('#edit-pray-cancel-button').addEventListener('click', () => {
       this.closeEditPrayModal();
@@ -135,12 +157,9 @@ class App {
       const personId = $('#edit-pray-input-box').dataset.id;
       const prays = Array.from($('#edit-pray-input-box').querySelectorAll('input'));
 
-      this.app.people[personId].prays = prays.map((input) => input.value).filter((pray) => !!pray);
-      this.closeEditPrayModal();
-      this.render();
-      this.app.save();
+      this.editPrays(personId, prays);
     });
-  }
+  };
 }
 
 new App();
