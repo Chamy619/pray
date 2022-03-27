@@ -42,7 +42,7 @@ class App {
     }"/>`;
 
   $button = () =>
-    `<button class="remove-button w-6 h-6 ml-3 border-2 border-red-500 rounded-full flex items-center justify-center text-red-500 font-bold hover:border-red-700 hover:text-red-700">-</button>`;
+    `<button type="button" class="remove-button w-6 h-6 ml-3 border-2 border-red-500 rounded-full flex items-center justify-center text-red-500 font-bold hover:border-red-700 hover:text-red-700">-</button>`;
 
   $inputAndRemoveButtonBox = (placeholder, pray) => {
     return `<div class="flex items-center mb-5 last:mb-0">${this.$input(placeholder, pray)}${this.$button()}</div>`;
@@ -215,8 +215,10 @@ class App {
     $('#edit-pray-modal').addEventListener('click', (event) => {
       const $removeButton = event.target.closest('.remove-button');
       if ($removeButton) {
-        const $targetBox = $removeButton.closest('div');
-        $targetBox.remove();
+        if ($('#edit-pray-input-box').querySelectorAll('input').length > 1) {
+          const $targetBox = $removeButton.closest('div');
+          $targetBox.remove();
+        }
         event.stopPropagation();
         return;
       }
