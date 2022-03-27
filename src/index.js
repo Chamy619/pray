@@ -36,6 +36,11 @@ class App {
     `;
   };
 
+  $input = (placeholder, value) =>
+    `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="${placeholder}" value="${
+      value || ''
+    }"/>`;
+
   preventBodyScroll = () => {
     $('body').classList.add('overflow-y-hidden');
   };
@@ -67,19 +72,9 @@ class App {
 
   drawPrayInput = (prays) => {
     if (!prays.length) {
-      $(
-        '#edit-pray-input-box',
-      ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
+      $('#edit-pray-input-box').innerHTML = this.$input('기도제목을 입력해주세요.');
     } else {
-      $('#edit-pray-input-box').innerHTML = prays
-        .map(
-          (pray) => `<input
-          class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0"
-          placeholder="기도제목을 입력해주세요."
-          value="${pray}"
-        />`,
-        )
-        .join('');
+      $('#edit-pray-input-box').innerHTML = prays.map((pray) => this.$input('기도제목을 입력해주세요.', pray)).join('');
     }
   };
 
@@ -118,21 +113,13 @@ class App {
   };
 
   addPray = () => {
-    $('#edit-pray-input-box').insertAdjacentHTML(
-      'beforeEnd',
-      `<input
-      class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0"
-      placeholder="기도제목을 입력해주세요."
-    />`,
-    );
+    $('#edit-pray-input-box').insertAdjacentHTML('beforeEnd', this.$input('기도제목을 입력해주세요.'));
     const inputs = $('#edit-pray-input-box').querySelectorAll('input');
     inputs[inputs.length - 1].focus();
   };
 
   clearPrayInput = () => {
-    $(
-      '#edit-pray-input-box',
-    ).innerHTML = `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="기도제목을 입력해주세요." />`;
+    $('#edit-pray-input-box').innerHTML = this.$input('기도제목을 입력해주세요.');
     $('#edit-pray-input-box').querySelector('input').focus();
   };
 
