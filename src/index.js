@@ -37,9 +37,16 @@ class App {
   };
 
   $input = (placeholder, value) =>
-    `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 mb-5 last:mb-0" placeholder="${placeholder}" value="${
+    `<input class="border-2 border-blue-500 rounded-sm w-full h-10 p-5 last:mb-0" placeholder="${placeholder}" value="${
       value || ''
     }"/>`;
+
+  $button = () =>
+    `<button class="remove-button w-6 h-6 ml-3 border-2 border-red-500 rounded-full flex items-center justify-center text-red-500 font-bold hover:border-red-700 hover:text-red-700">-</button>`;
+
+  $inputAndRemoveButtonBox = (placeholder, pray) => {
+    return `<div class="flex items-center mb-5 last:mb-0">${this.$input(placeholder, pray)}${this.$button()}</div>`;
+  };
 
   preventBodyScroll = () => {
     $('body').classList.add('overflow-y-hidden');
@@ -72,9 +79,11 @@ class App {
 
   drawPrayInput = (prays) => {
     if (!prays.length) {
-      $('#edit-pray-input-box').innerHTML = this.$input('기도제목을 입력해주세요.');
+      $('#edit-pray-input-box').innerHTML = this.$inputAndRemoveButtonBox('기도제목을 입력해주세요.');
     } else {
-      $('#edit-pray-input-box').innerHTML = prays.map((pray) => this.$input('기도제목을 입력해주세요.', pray)).join('');
+      $('#edit-pray-input-box').innerHTML = prays
+        .map((pray) => this.$inputAndRemoveButtonBox('기도제목을 입력해주세요.', pray))
+        .join('');
     }
   };
 
@@ -113,13 +122,16 @@ class App {
   };
 
   addPray = () => {
-    $('#edit-pray-input-box').insertAdjacentHTML('beforeEnd', this.$input('기도제목을 입력해주세요.'));
+    $('#edit-pray-input-box').insertAdjacentHTML(
+      'beforeEnd',
+      this.$inputAndRemoveButtonBox('기도제목을 입력해주세요.'),
+    );
     const inputs = $('#edit-pray-input-box').querySelectorAll('input');
     inputs[inputs.length - 1].focus();
   };
 
   clearPrayInput = () => {
-    $('#edit-pray-input-box').innerHTML = this.$input('기도제목을 입력해주세요.');
+    $('#edit-pray-input-box').innerHTML = this.$inputAndRemoveButtonBox('기도제목을 입력해주세요.');
     $('#edit-pray-input-box').querySelector('input').focus();
   };
 
@@ -198,6 +210,16 @@ class App {
     $('#remove-person-confirm-button').addEventListener('click', (event) => {
       const id = event.target.dataset.id;
       this.removePerson(id);
+    });
+
+    $('#edit-pray-modal').addEventListener('click', (event) => {
+      const $removeButton = event.target.closest('.remove-button');
+      if ($removeButton) {
+        const $targetBox = $removeButton.closest('div');
+        $targetBox.remove();
+        event.stopPropagation();
+        return;
+      }
     });
   };
 }
