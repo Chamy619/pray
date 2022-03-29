@@ -18,7 +18,8 @@ class App {
     });
   }
 
-  render = () => {
+  render = async () => {
+    await this.app.refresh();
     $('#app').innerHTML = `
     <ul>
     ${this.app.people
@@ -94,14 +95,13 @@ class App {
     this.enableBodyScroll();
   };
 
-  addPerson = () => {
+  addPerson = async () => {
     const name = $('#add-person-input').value;
     if (name) {
-      this.app.addPerson(name);
+      await this.app.addPerson(name);
     }
     this.closeAddPersonModal();
-    this.render();
-    this.app.save();
+    await this.render();
   };
 
   openRemovePersonModal = (person) => {
@@ -116,11 +116,10 @@ class App {
     this.enableBodyScroll();
   };
 
-  removePerson = (id) => {
-    this.app.removePerson(id);
+  removePerson = async (id) => {
+    await this.app.removePerson(id);
     this.closeRemovePersonModal();
-    this.render();
-    this.app.save();
+    await this.render();
   };
 
   addPray = () => {
@@ -137,11 +136,13 @@ class App {
     $('#edit-pray-input-box').querySelector('input').focus();
   };
 
-  editPrays = (id, prays) => {
-    this.app.getPerson(id).prays = prays.map((input) => input.value).filter((pray) => !!pray);
+  editPrays = async (id, prays) => {
+    await this.app.setPrays(
+      id,
+      prays.map((input) => input.value).filter((pray) => !!pray),
+    );
     this.closeEditPrayModal();
-    this.render();
-    this.app.save();
+    await this.render();
   };
 
   initEvent = () => {

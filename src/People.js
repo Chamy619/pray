@@ -38,24 +38,12 @@ class People {
     await Storage.removePerson(this.id, personId);
   }
 
-  loadPerson(person) {
-    this._people.push(person);
+  async setPrays(personId, prays) {
+    await Storage.setPrays(this.id, personId, prays);
   }
 
   save() {
     localStorage.setItem('app_info', JSON.stringify(this));
-  }
-
-  load() {
-    const appInfo = JSON.parse(localStorage.getItem('app_info'));
-    if (appInfo) {
-      appInfo._people.forEach((person) => {
-        const newPerson = new Person(person._name, person._id);
-        newPerson.prays = person._prays;
-        this.loadPerson(newPerson);
-      });
-      this._nextId = appInfo._nextId;
-    }
   }
 
   async refresh() {

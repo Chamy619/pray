@@ -43,7 +43,7 @@ export const getPerson = async (roomId, personId) => {
   return await get(child(ref(db), `rooms/${roomId}/people`)).then((snapshot) => snapshot.val()[personId]);
 };
 
-export const setPray = async (roomId, personId, prays) => {
+export const setPrays = async (roomId, personId, prays) => {
   return await set(ref(db, `rooms/${roomId}/people/${personId}/prays`), prays);
 };
 
