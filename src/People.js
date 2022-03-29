@@ -34,8 +34,8 @@ class People {
     return this._people.find((person) => person.id === id);
   }
 
-  removePerson(id) {
-    this._people = this._people.filter((person) => person.id !== id);
+  async removePerson(personId) {
+    await Storage.removePerson(this.id, personId);
   }
 
   loadPerson(person) {

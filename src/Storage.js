@@ -7,6 +7,7 @@ import {
   child,
   push,
   update,
+  remove,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
 
 const firebaseConfig = {
@@ -44,4 +45,8 @@ export const getPerson = async (roomId, personId) => {
 
 export const setPray = async (roomId, personId, prays) => {
   return await set(ref(db, `rooms/${roomId}/people/${personId}/prays`), prays);
+};
+
+export const removePerson = async (roomId, personId) => {
+  await remove(ref(db, `rooms/${roomId}/people/${personId}`));
 };
