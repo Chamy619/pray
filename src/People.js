@@ -1,45 +1,63 @@
 import Person from './Person.js';
+import * as Storage from './Storage.js';
 
 class People {
-  constructor() {
-    this._people = [];
-    this._nextId = 0;
+  constructor(id, people) {
+    this._id = id;
+
+    const peopleData = [];
+    for (const key in people) {
+      const person = new Person(people[key].name, key, people[key].prays);
+      peopleData.push(person);
+    }
+    this._people = peopleData;
+  }
+
+  get id() {
+    return this._id;
   }
 
   get people() {
     return this._people;
   }
 
-  addPerson(personName) {
-    this._people.push(new Person(personName, this._nextId++));
+  set people(people) {
+    this._people = people;
+  }
+
+  async addPerson(personName) {
+    const personId = Storage.getAddPersonId();
+    await Storage.addPrayPerson(this.id, personId, personName);
   }
 
   getPerson(id) {
-    return this._people.find((person) => person.id === Number(id));
+    return this._people.find((person) => person.id === id);
   }
 
-  removePerson(id) {
-    this._people = this._people.filter((person) => person.id !== Number(id));
+  async removePerson(personId) {
+    await Storage.removePerson(this.id, personId);
   }
 
-  loadPerson(person) {
-    this._people.push(person);
+  async setPrays(personId, prays) {
+    await Storage.setPrays(this.id, personId, prays);
   }
 
   save() {
     localStorage.setItem('app_info', JSON.stringify(this));
   }
 
-  load() {
-    const appInfo = JSON.parse(localStorage.getItem('app_info'));
-    if (appInfo) {
-      appInfo._people.forEach((person) => {
-        const newPerson = new Person(person._name, person._id);
-        newPerson.prays = person._prays;
-        this.loadPerson(newPerson);
-      });
-      this._nextId = appInfo._nextId;
+  async refresh() {
+    const data = await Storage.getPrayRoomData(this.id);
+    if (!data) {
+      return;
     }
+    const people = data.people;
+    const peopleData = [];
+    for (const key in people) {
+      const person = new Person(people[key].name, key, people[key].prays);
+      peopleData.push(person);
+    }
+    this.people = peopleData;
   }
 
   get text() {

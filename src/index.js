@@ -1,11 +1,11 @@
 import People from './People.js';
+import * as Storage from './Storage.js';
 
 const $ = (element) => document.querySelector(element);
 
 class App {
-  constructor() {
-    this.app = new People();
-    this.app.load();
+  constructor(roomId, { people, name }) {
+    this.app = new People(roomId, people);
     this.render();
     this.initEvent();
     // eslint-disable-next-line no-undef
@@ -14,9 +14,12 @@ class App {
         return this.app.text;
       },
     });
+    this.name = name;
   }
 
-  render = () => {
+  render = async () => {
+    await this.app.refresh();
+    $('.room-name').innerText = this.name + '🙏';
     $('#app').innerHTML = `
     <ul>
     ${this.app.people
@@ -92,14 +95,13 @@ class App {
     this.enableBodyScroll();
   };
 
-  addPerson = () => {
+  addPerson = async () => {
     const name = $('#add-person-input').value;
     if (name) {
-      this.app.addPerson(name);
+      await this.app.addPerson(name);
     }
     this.closeAddPersonModal();
-    this.render();
-    this.app.save();
+    await this.render();
   };
 
   openRemovePersonModal = (person) => {
@@ -114,11 +116,10 @@ class App {
     this.enableBodyScroll();
   };
 
-  removePerson = (id) => {
-    this.app.removePerson(id);
+  removePerson = async (id) => {
+    await this.app.removePerson(id);
     this.closeRemovePersonModal();
-    this.render();
-    this.app.save();
+    await this.render();
   };
 
   addPray = () => {
@@ -135,11 +136,13 @@ class App {
     $('#edit-pray-input-box').querySelector('input').focus();
   };
 
-  editPrays = (id, prays) => {
-    this.app.getPerson(id).prays = prays.map((input) => input.value).filter((pray) => !!pray);
+  editPrays = async (id, prays) => {
+    await this.app.setPrays(
+      id,
+      prays.map((input) => input.value).filter((pray) => !!pray),
+    );
     this.closeEditPrayModal();
-    this.render();
-    this.app.save();
+    await this.render();
   };
 
   initEvent = () => {
@@ -226,4 +229,11 @@ class App {
   };
 }
 
-new App();
+let data = null;
+let roomId = null;
+while (!data) {
+  roomId = prompt('암호를 입력해주세요.');
+  data = await Storage.getPrayRoomData(roomId);
+}
+
+new App(roomId, data);

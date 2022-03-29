@@ -1,8 +1,8 @@
 class Person {
-  constructor(name, id) {
+  constructor(name, id, prays) {
     this._name = name;
     this._id = id;
-    this._prays = [];
+    this._prays = prays || [];
   }
 
   get name() {
