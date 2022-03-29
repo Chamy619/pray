@@ -4,8 +4,8 @@ import * as Storage from './Storage.js';
 const $ = (element) => document.querySelector(element);
 
 class App {
-  constructor({ people, name }) {
-    this.app = new People('dmsgP!!', people);
+  constructor(roomId, { people, name }) {
+    this.app = new People(roomId, people);
     this.render();
     this.initEvent();
     // eslint-disable-next-line no-undef
@@ -229,5 +229,11 @@ class App {
   };
 }
 
-const data = await Storage.getPrayRoomData('dmsgP!!');
-new App(data);
+let data = null;
+let roomId = null;
+while (!data) {
+  roomId = prompt('암호를 입력해주세요.');
+  data = await Storage.getPrayRoomData(roomId);
+}
+
+new App(roomId, data);

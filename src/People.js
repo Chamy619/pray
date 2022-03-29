@@ -3,14 +3,14 @@ import * as Storage from './Storage.js';
 
 class People {
   constructor(id, people) {
+    this._id = id;
+
     const peopleData = [];
     for (const key in people) {
       const person = new Person(people[key].name, key, people[key].prays);
       peopleData.push(person);
     }
-    this._id = id;
     this._people = peopleData;
-    this._nextId = 0;
   }
 
   get id() {
@@ -48,6 +48,9 @@ class People {
 
   async refresh() {
     const data = await Storage.getPrayRoomData(this.id);
+    if (!data) {
+      return;
+    }
     const people = data.people;
     const peopleData = [];
     for (const key in people) {
