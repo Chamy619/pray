@@ -113,5 +113,30 @@
         </div>
       </div>
     </div>
+
+    <!-- firebase sdk -->
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js';
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: 'AIzaSyC5LLvcicXUaHy6b1SwyKVKpicNqXqYf-4',
+        authDomain: 'pray-80ba6.firebaseapp.com',
+        projectId: 'pray-80ba6',
+        storageBucket: 'pray-80ba6.appspot.com',
+        messagingSenderId: '506173166495',
+        appId: '1:506173166495:web:04d01c518c4a896a6aa3aa',
+        measurementId: 'G-9WPTT04XQH',
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
   </body>
 </html>
