@@ -1,18 +1,13 @@
 import People from './People.js';
 import * as Storage from './Storage.js';
 
-console.log(await Storage.getPrayRoomData('dmsgP!!'));
 const data = await Storage.getPrayRoomData('dmsgP!!');
-const people = data.people;
-const peopleObj = new People(people);
-console.log(peopleObj.people);
 
 const $ = (element) => document.querySelector(element);
 
 class App {
-  constructor() {
-    this.app = new People();
-    this.app.load();
+  constructor(prayRoom) {
+    this.app = new People(prayRoom.people);
     this.render();
     this.initEvent();
     // eslint-disable-next-line no-undef
@@ -233,4 +228,4 @@ class App {
   };
 }
 
-new App();
+new App(data);
