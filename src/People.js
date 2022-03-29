@@ -1,8 +1,14 @@
 import Person from './Person.js';
+// import * as Storage from './Storage.js';
 
 class People {
-  constructor() {
-    this._people = [];
+  constructor(people) {
+    const peopleData = [];
+    for (const key in people) {
+      const person = new Person(people[key].name, key, people[key].prays);
+      peopleData.push(person);
+    }
+    this._people = peopleData;
     this._nextId = 0;
   }
 
