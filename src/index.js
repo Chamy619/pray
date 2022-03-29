@@ -1,13 +1,11 @@
 import People from './People.js';
 import * as Storage from './Storage.js';
 
-const data = await Storage.getPrayRoomData('dmsgP!!');
-
 const $ = (element) => document.querySelector(element);
 
 class App {
-  constructor(prayRoom) {
-    this.app = new People('dmsgP!!', prayRoom.people);
+  constructor({ people, name }) {
+    this.app = new People('dmsgP!!', people);
     this.render();
     this.initEvent();
     // eslint-disable-next-line no-undef
@@ -16,10 +14,12 @@ class App {
         return this.app.text;
       },
     });
+    this.name = name;
   }
 
   render = async () => {
     await this.app.refresh();
+    $('.room-name').innerText = this.name + '🙏';
     $('#app').innerHTML = `
     <ul>
     ${this.app.people
@@ -229,4 +229,5 @@ class App {
   };
 }
 
+const data = await Storage.getPrayRoomData('dmsgP!!');
 new App(data);
