@@ -7,7 +7,7 @@ const $ = (element) => document.querySelector(element);
 
 class App {
   constructor(prayRoom) {
-    this.app = new People(prayRoom.people);
+    this.app = new People('dmsgP!!', prayRoom.people);
     this.render();
     this.initEvent();
     // eslint-disable-next-line no-undef

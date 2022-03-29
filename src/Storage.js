@@ -23,15 +23,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+export const getAddPersonId = (roomId) => {
+  return push(child(ref(db), `room/${roomId}/people`)).key;
+};
+
 export const getPrayRoomData = async (id) => {
   return await get(child(ref(db), `rooms/${id}`)).then((snapshot) => snapshot.val());
 };
 
-export const addPrayPerson = async (id, name) => {
-  const newPersonKey = push(child(ref(db), `rooms/${id}/people`)).key;
-
+export const addPrayPerson = async (roomId, personId, name) => {
   const updates = {};
-  updates[`rooms/${id}/people/` + newPersonKey] = { name };
+  updates[`rooms/${roomId}/people/` + personId] = { name };
 
   return await update(ref(db), updates);
 };
