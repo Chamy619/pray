@@ -3,6 +3,34 @@ import * as Storage from './Storage.js';
 
 const $ = (element) => document.querySelector(element);
 
+const template = (title, people) => `
+  <h1 class="text-3xl font-bold text-center p-5 pb-0 mb-5">${title}🙏</h1>
+  <button class="copy-button absolute top-5 right-10 text-2xl">
+    <i class="far fa-copy"></i>
+  </button>
+  <ul>
+  ${people
+    .map(
+      (person) => `
+    <li class="text-lg text-gray-800 mb-2">
+      ${person.name} 
+      <button class="edit-pray-button px-1 text-sm hover:text-lg" data-id="${person.id}">✏️</button>
+      <button class="remove-person-button px-1 text-sm hover:text-lg" data-id="${person.id}">🗑</button>
+      <ul class="ml-5" style="list-style-type:'\\2728'">
+        ${person.prays.map((pray) => `<li class="text-gray-600">${pray}</li>`).join('')}
+      </ul>
+    </li>`,
+    )
+    .join('')}
+  </ul>
+  <button
+      class="my-5 mx-auto w-full h-10 bg-blue-500 rounded-lg text-gray-50 hover:bg-blue-700"
+      id="add-person-button"
+    >
+      +
+  </button>
+  `;
+
 class App {
   constructor(roomId, { people, name }) {
     this.app = new People(roomId, people);
@@ -19,24 +47,7 @@ class App {
 
   render = async () => {
     await this.app.refresh();
-    $('.room-name').innerText = this.name + '🙏';
-    $('#app').innerHTML = `
-    <ul>
-    ${this.app.people
-      .map(
-        (person) => `
-      <li class="text-lg text-gray-800 mb-2">
-      ${person.name} 
-      <button class="edit-pray-button px-1 text-sm hover:text-lg" data-id="${person.id}">✏️</button>
-      <button class="remove-person-button px-1 text-sm hover:text-lg" data-id="${person.id}">🗑</button>
-      <ul class="ml-5" style="list-style-type:'\\2728'">
-        ${person.prays.map((pray) => `<li class="text-gray-600">${pray}</li>`).join('')}
-      </ul>
-      </li>`,
-      )
-      .join('')}
-    </ul>
-    `;
+    $('#app').innerHTML = template(this.name, this.app.people);
   };
 
   $input = (placeholder, value) =>
@@ -151,8 +162,6 @@ class App {
       this.addPerson();
     });
 
-    $('#add-person-button').addEventListener('click', this.openAddPersonModal);
-
     $('#add-person-modal-background').addEventListener('click', (event) => {
       const modal = event.target.closest('#add-person-modal');
       if (!modal) {
@@ -177,6 +186,11 @@ class App {
         const person = this.app.getPerson(id);
         this.openRemovePersonModal(person);
         return;
+      }
+
+      const $addPersonButton = event.target.closest('#add-person-button');
+      if ($addPersonButton) {
+        this.openAddPersonModal();
       }
     });
 
@@ -229,11 +243,30 @@ class App {
   };
 }
 
-let data = null;
-let roomId = null;
-while (!data) {
-  roomId = prompt('암호를 입력해주세요.');
-  data = await Storage.getPrayRoomData(roomId);
-}
+$('#app').innerHTML = `
+  <div class="absolute top-0 left-0 bg-gray-400 w-full h-full flex justify-center items-center">
+    <div class="rounded-lg border-2 border-gray-700 shadow-xl bg-white w-56 flex-col p-5">
+      <form id="login-form" autocomplete="off">
+      <span><strong>암호를 입력해주세요.</strong></span>
+      <input id="login-input" type="text" class="w-full mt-2 border-2 border-blue-500 px-2 py-1" autofocus />
+      <button class="mt-2 bg-blue-500 text-white px-3 py-1 rounded-sm w-full" >확인</button>
+      <span id="login-error-message" class="text-red-500 text-sm"></span>
+      </form>
+    </div>
+  </div>
+`;
 
-new App(roomId, data);
+$('#app').addEventListener('submit', async (event) => {
+  const $loginForm = event.target.closest('#login-form');
+  if ($loginForm) {
+    event.preventDefault();
+    const $loginInput = $('#login-input');
+    const id = $loginInput.value;
+    const data = await Storage.getPrayRoomData(id);
+    if (id && data) {
+      new App(id, data);
+    } else {
+      $('#login-error-message').innerText = '암호를 확인해주세요';
+    }
+  }
+});
