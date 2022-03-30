@@ -26,16 +26,22 @@ class App {
       .map(
         (person) => `
       <li class="text-lg text-gray-800 mb-2">
-      ${person.name} 
-      <button class="edit-pray-button px-1 text-sm hover:text-lg" data-id="${person.id}">✏️</button>
-      <button class="remove-person-button px-1 text-sm hover:text-lg" data-id="${person.id}">🗑</button>
-      <ul class="ml-5" style="list-style-type:'\\2728'">
-        ${person.prays.map((pray) => `<li class="text-gray-600">${pray}</li>`).join('')}
-      </ul>
+        ${person.name} 
+        <button class="edit-pray-button px-1 text-sm hover:text-lg" data-id="${person.id}">✏️</button>
+        <button class="remove-person-button px-1 text-sm hover:text-lg" data-id="${person.id}">🗑</button>
+        <ul class="ml-5" style="list-style-type:'\\2728'">
+          ${person.prays.map((pray) => `<li class="text-gray-600">${pray}</li>`).join('')}
+        </ul>
       </li>`,
       )
       .join('')}
     </ul>
+    <button
+        class="my-5 mx-auto w-full h-10 bg-blue-500 rounded-lg text-gray-50 hover:bg-blue-700"
+        id="add-person-button"
+      >
+        +
+      </button>
     `;
   };
 
@@ -151,8 +157,6 @@ class App {
       this.addPerson();
     });
 
-    $('#add-person-button').addEventListener('click', this.openAddPersonModal);
-
     $('#add-person-modal-background').addEventListener('click', (event) => {
       const modal = event.target.closest('#add-person-modal');
       if (!modal) {
@@ -177,6 +181,11 @@ class App {
         const person = this.app.getPerson(id);
         this.openRemovePersonModal(person);
         return;
+      }
+
+      const $addPersonButton = event.target.closest('#add-person-button');
+      if ($addPersonButton) {
+        this.openAddPersonModal();
       }
     });
 
