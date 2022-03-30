@@ -19,8 +19,8 @@ class App {
 
   render = async () => {
     await this.app.refresh();
-    $('.room-name').innerText = this.name + '🙏';
     $('#app').innerHTML = `
+    <h1 class="text-3xl font-bold text-center p-5 pb-0">${this.name}🙏</h1>
     <ul>
     ${this.app.people
       .map(
