@@ -243,11 +243,30 @@ class App {
   };
 }
 
-let data = null;
-let roomId = null;
-while (!data || !roomId) {
-  roomId = prompt('암호를 입력해주세요.');
-  data = await Storage.getPrayRoomData(roomId);
-}
+$('#app').innerHTML = `
+  <div class="absolute top-0 left-0 bg-gray-400 w-full h-full flex justify-center items-center">
+    <div class="rounded-lg border-2 border-gray-700 shadow-xl bg-white w-56 flex-col p-5">
+      <form id="login-form" autocomplete="off">
+      <span><strong>암호를 입력해주세요.</strong></span>
+      <input id="login-input" type="text" class="w-full mt-2 border-2 border-blue-500 px-2 py-1" autofocus />
+      <button class="mt-2 bg-blue-500 text-white px-3 py-1 rounded-sm w-full" >확인</button>
+      <span id="login-error-message" class="text-red-500 text-sm"></span>
+      </form>
+    </div>
+  </div>
+`;
 
-new App(roomId, data);
+$('#app').addEventListener('submit', async (event) => {
+  const $loginForm = event.target.closest('#login-form');
+  if ($loginForm) {
+    event.preventDefault();
+    const $loginInput = $('#login-input');
+    const id = $loginInput.value;
+    const data = await Storage.getPrayRoomData(id);
+    if (id && data) {
+      new App(id, data);
+    } else {
+      $('#login-error-message').innerText = '암호를 확인해주세요';
+    }
+  }
+});
