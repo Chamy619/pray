@@ -9,3 +9,4 @@
 - Javascript
 - TailwindCSS
 - Jest
+- Firebase
