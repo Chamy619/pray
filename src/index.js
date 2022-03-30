@@ -20,7 +20,10 @@ class App {
   render = async () => {
     await this.app.refresh();
     $('#app').innerHTML = `
-    <h1 class="text-3xl font-bold text-center p-5 pb-0">${this.name}🙏</h1>
+    <h1 class="text-3xl font-bold text-center p-5 pb-0 mb-5">${this.name}🙏</h1>
+    <button class="copy-button absolute top-5 right-10 text-2xl">
+      <i class="far fa-copy"></i>
+    </button>
     <ul>
     ${this.app.people
       .map(
@@ -240,7 +243,7 @@ class App {
 
 let data = null;
 let roomId = null;
-while (!data) {
+while (!data || !roomId) {
   roomId = prompt('암호를 입력해주세요.');
   data = await Storage.getPrayRoomData(roomId);
 }
