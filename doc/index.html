@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>기도🙏</title>
+    <link href="output.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
+    <script src="https://kit.fontawesome.com/a7b433808c.js" crossorigin="anonymous"></script>
+    <script type="module" src="main.js" defer></script>
+  </head>
+  <body>
+    <section class="mx-10">
+      <div id="app"></div>
+    </section>
+    <div
+      class="fixed flex hidden justify-center items-center top-0 w-full h-full bg-gray-800 bg-opacity-75"
+      id="add-person-modal-background"
+    >
+      <div class="bg-white rounded-lg w-96 flex-col shadow-2xl" id="add-person-modal">
+        <h3 class="py-2 rounded-t-lg text-center text-2xl text-gray-200 bg-blue-500">기도할 사람 추가</h3>
+        <form class="m-5" id="add-person-form" autocomplete="off">
+          <input
+            class="border-2 border-blue-500 rounded-sm w-full h-10 p-5"
+            placeholder="이름을 입력해주세요."
+            id="add-person-input"
+          />
+          <div class="flex justify-between mt-4">
+            <button
+              class="rounded-lg py-2 px-4 bg-red-500 text-gray-50 hover:bg-red-700"
+              type="reset"
+              id="add-person-cancel-button"
+            >
+              취소
+            </button>
+            <button class="rounded-lg py-2 px-4 bg-blue-500 text-gray-50 hover:bg-blue-700" type="submit">확인</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="fixed flex hidden justify-center items-center top-0 w-full h-full bg-gray-800 bg-opacity-75"
+      id="edit-pray-modal-background"
+    >
+      <div class="bg-white rounded-lg w-96 flex-col shadow-2xl" id="edit-pray-modal">
+        <h3 class="py-2 rounded-t-lg text-center text-2xl text-gray-200 bg-blue-500">기도제목 수정</h3>
+        <div class="flex justify-between px-5 pt-5">
+          <h5 class="text-lg" id="edit-pray-name"></h5>
+          <button
+            type="button"
+            id="edit-pray-reset"
+            class="border-2 border-blue-500 rounded-lg w-20 h-8 font-bold text-blue-500"
+          >
+            초기화
+          </button>
+        </div>
+
+        <form class="p-5" id="edit-pray-form" autocomplete="off">
+          <div class="max-h-56 overflow-y-auto" id="edit-pray-input-box"></div>
+          <div class="flex justify-center">
+            <button
+              type="button"
+              id="add-pray-button"
+              class="border-2 border-blue-500 rounded-full w-8 h-8 text-blue-500 font-bold mt-3"
+            >
+              +
+            </button>
+          </div>
+          <div class="flex justify-between mt-3">
+            <button
+              class="rounded-lg py-2 px-4 bg-red-500 text-gray-50 hover:bg-red-700"
+              type="reset"
+              id="edit-pray-cancel-button"
+            >
+              취소
+            </button>
+            <button class="rounded-lg py-2 px-4 bg-blue-500 text-gray-50 hover:bg-blue-700" type="submit">확인</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="fixed flex hidden justify-center items-center top-0 w-full h-full bg-gray-800 bg-opacity-75"
+      id="remove-person-modal-background"
+    >
+      <div class="bg-white rounded-lg w-96 flex-col shadow-2xl" id="remove-person-modal">
+        <h3 class="py-2 rounded-t-lg text-center text-2xl text-gray-200 bg-red-500">삭제</h3>
+        <h5 class="text-lg pt-5 text-center" id="remove-person-text">ooo님을 지우시겠습니까?</h5>
+        <div class="flex justify-between my-3 mx-5">
+          <button
+            class="rounded-lg py-2 px-4 bg-gray-500 text-gray-50 hover:bg-gray-700"
+            id="remove-person-cancel-button"
+          >
+            취소
+          </button>
+          <button
+            class="rounded-lg py-2 px-4 bg-red-500 text-gray-50 hover:bg-red-700"
+            id="remove-person-confirm-button"
+          >
+            확인
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
