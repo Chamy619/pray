@@ -1,5 +1,6 @@
 import People from './People.js';
 import * as Storage from './Storage.js';
+import '../dist/output.css';
 
 const $ = (element) => document.querySelector(element);
 
